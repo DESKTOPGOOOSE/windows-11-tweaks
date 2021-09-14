@@ -1,4 +1,4 @@
-﻿; Windows 11 Tweaks source code
+; Windows 11 Tweaks source code
 #SingleInstance Off
 #NoEnv
 #NoTrayIcon
@@ -14,6 +14,7 @@ MsgBox, 16, Error, You must run this program as an administrator.
 ExitApp
 }
 else
+MsgBox, 48, WARNING, This might not work on future 11 builds.
 Goto, CreateGUI
 return
 
@@ -28,6 +29,9 @@ Gui Tab, 2
 Gui Add, GroupBox, x11 y35 w230 h135, Windows Explorer Tweaks
 Gui Add, Button, x20 y59 w110 h23, &Use old explorer
 Gui Add, Button, x20 y89 w110 h23, &Restore default
+Gui Add, GroupBox, x250 y35 w283 h134, Start Menu Tweaks
+Gui Add, Button, x257 y56 w161 h23, &Use Windows 10 start menu
+Gui Add, Button, x258 y83 w160 h23, &Restore 11 start menu
 Gui Tab, 3
 Gui Font, s20, Segoe UI
 Gui Add, Text, x149 y35 w245 h44 +0x200, Windows 11 Tweaks
@@ -99,5 +103,23 @@ Gui, Destroy
 RunWait, taskkill /f /im explorer.exe
 RunWait, explorer.exe
 MsgBox, 64, Complete, The default explorer has been restored.
+Goto, CreateGUI
+return
+
+ButtonUseWindows10startmenu:
+RegWrite, REG_SZ, HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Start_ShowClassicMode, 1
+Gui, Destroy
+RunWait, taskkill /f /im explorer.exe
+RunWait, explorer.exe
+MsgBox, 64, Complete, The old start menu has been applied.
+Goto, CreateGUI
+return
+
+ButtonRestore11startmenu:
+RegWrite, REG_SZ, HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Start_ShowClassicMode, 0
+Gui, Destroy
+RunWait, taskkill /f /im explorer.exe
+RunWait, explorer.exe
+MsgBox, 64, Complete, The Windows 11 start menu has been restored.
 Goto, CreateGUI
 return
